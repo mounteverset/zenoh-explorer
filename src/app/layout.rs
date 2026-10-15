@@ -570,6 +570,42 @@ impl ZenohExplorer {
                     });
                 }
 
+                let secondary = self.text_secondary_color();
+                egui::CollapsingHeader::new("ROS 2 message decoding").show(ui, |ui| {
+                    let mut changed = false;
+                    ui.horizontal(|ui| {
+                        ui.label("Message folder:");
+                        changed |= ui
+                            .add(
+                                egui::TextEdit::singleline(&mut self.ros_settings.msg_dir)
+                                    .desired_width(320.0)
+                                    .hint_text("parent folder of your custom .msg packages"),
+                            )
+                            .lost_focus();
+                        ui.label("Distro:");
+                        changed |= ui
+                            .add(
+                                egui::TextEdit::singleline(&mut self.ros_settings.distro)
+                                    .desired_width(70.0),
+                            )
+                            .lost_focus();
+                    });
+                    changed |= ui
+                        .checkbox(
+                            &mut self.ros_settings.online,
+                            "Look up standard types on GitHub",
+                        )
+                        .changed();
+                    if changed {
+                        crate::ros_msg::apply_settings(self.ros_settings.clone());
+                    }
+                    ui.label(
+                        RichText::new(crate::ros_msg::status())
+                            .size(TEXT_SMALL_SIZE)
+                            .color(secondary),
+                    );
+                });
+
                 ui.separator();
 
                 // Global alert banner (export errors, warnings) — visible on every tab

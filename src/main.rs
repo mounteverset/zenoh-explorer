@@ -11,6 +11,7 @@ mod app;
 mod colors;
 mod events;
 mod payload;
+mod ros_msg;
 mod transfer;
 mod types;
 mod ui;

@@ -235,6 +235,8 @@ pub struct ZenohExplorer {
     /// (leaf topics whose path matches the filter, all leaf topics), computed
     /// with the filter cache; None when not filtering.
     pub(crate) tree_filter_counts: Option<(usize, usize)>,
+    /// Where ROS 2 message definitions are looked up (applied on edit).
+    pub(crate) ros_settings: crate::ros_msg::Settings,
 }
 
 impl ZenohExplorer {
@@ -356,6 +358,7 @@ impl ZenohExplorer {
             ui_alert_since: None,
             help_target: None,
             tree_filter_counts: None,
+            ros_settings: crate::ros_msg::Settings::default(),
         }
     }
 }

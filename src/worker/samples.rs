@@ -19,7 +19,8 @@ pub(crate) fn message_from_sample(
     };
     let display = match kind {
         SampleKindView::Delete => "[DELETE]".to_string(),
-        SampleKindView::Put => crate::payload::preview(&raw_bytes, MAX_UI_DISPLAY_SIZE),
+        SampleKindView::Put => crate::ros_msg::decode(sample.key_expr().as_str(), &raw_bytes)
+            .unwrap_or_else(|| crate::payload::preview(&raw_bytes, MAX_UI_DISPLAY_SIZE)),
     };
     let source_ts = sample
         .timestamp()

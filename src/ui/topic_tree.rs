@@ -409,7 +409,7 @@ impl TopicTreeUI for ZenohExplorer {
     /// Shows details for the selected topic
     fn show_topic_details(&mut self, ui: &mut egui::Ui) {
         if let Some(ref topic) = self.selected_topic.clone() {
-            ui.heading(topic);
+            ui.heading(crate::ros_msg::display_key(topic).into_owned());
 
             // Get the node details (extract data first to avoid borrow conflicts)
             let (message_count, payload_opt, encoding_opt, kind, source_time, summary, child_keys) =
@@ -439,7 +439,9 @@ impl TopicTreeUI for ZenohExplorer {
                 ui.label(branch_summary_text(&summary, now));
                 ui.separator();
                 for child in &child_keys {
-                    if ui.selectable_label(false, child).clicked() {
+                    let shown = crate::ros_msg::hash_label(&format!("{topic}/{child}"))
+                        .unwrap_or(child);
+                    if ui.selectable_label(false, shown).clicked() {
                         self.selected_topic = Some(format!("{}/{}", topic, child));
                     }
                 }
@@ -878,7 +880,7 @@ impl TopicTreeUI for ZenohExplorer {
                 };
                 let response = ui.selectable_label(
                     is_selected,
-                    row_label(ui, icon, &node.key, &filter_lower, underline),
+                    row_label(ui, icon, crate::ros_msg::hash_label(&full_path).unwrap_or(&node.key), &filter_lower, underline),
                 );
 
                 if response.clicked() {

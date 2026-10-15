@@ -213,7 +213,7 @@ impl MessagesUI for ZenohExplorer {
                         );
 
                         // Key
-                        ui.label(RichText::new(&message.key).strong());
+                        ui.label(RichText::new(crate::ros_msg::display_key(&message.key)).strong());
                     });
 
                     // Payload (truncated)
